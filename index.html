@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="包含qwEditor，wangEditor，Ueditor和TinyMCE四种最常用的富文本编辑器，可自由选择使用">
+    <title>富文本编辑器（Rich Text Editor）</title>
+      <link rel="icon" href="../logo.ico">
+      <script src="/static/addons/cms/js/huisi.element.0.2.js"></script>
+      <link rel="stylesheet" href="qwstyle.css" >
+      <style>
+.panel-heading {padding: .625rem 1rem;border-bottom: 1px solid #ddd;border-top-left-radius: 3px;border-top-right-radius: 3px;background-color: #f5f5f5}
+.panel-body { padding: 1rem;width: 97%;box-shadow: 0 0 10px 0px #eee;display: none;}
+    select#inputType {padding: 5px 8px;border: 1px solid #ccc;color: #696969;margin: 5px;}
+.L1, .L2{width: 560px;}
+      </style>
+</head>
+<body>
+    <h1></h1>
+  <div class="container panel">
+      <div class="panel-heading"><h2>清文编辑器（qwEditor）</h2>
+      <span class="updateInfo">清文编辑器（qwEditor）
+是一款简易但功能齐全的富文本编辑器，提供了最常见的45个标签，只要选中内容，然后点击标签即可使用。</span>
+      </div>
+      <div class="panel-body">
+          <div class="L1">
+              <div class="border box" id="displayBox"></div><br>
+              <h3 class="center">字符操作</h3>
+              <div><span>字符统计：</span><span id="stringTotal"></span></div>
+              <div><span>字符替换：</span><span id="stringReplace"></span></div>
+          </div>
+          <div class="L2">
+        <div id="inputBox"><textarea id="content" cols="50" rows="5"></textarea></div>
+        <h3 class="center">添加HTML标签或者文本</h3>
+<div><span>样式：</span><span id="style"></span></div>
+<div><span>字母样式：</span><span id="alphabetStyle"></span></div>
+<div><span>布局：</span><span id="layout"></span></div>
+<div><span>物件：</span><span id="widget"><input type="button" id="A" value="A" title="链接"><input type="button" id="Img" value="Img" title="图片"><input type="button" id="Iframe" value="Iframe" title="框架"><input type="button" id="Progress" value="Progress" title="进度条"><input type="button" id="Meter" value="Meter" title="计量器"></span></div>
+<div><span>表单：</span><select id="inputType"><option value="">请选择</option></select></div>
+<div><span>标题：</span><span id="heading"></span></div>
+<div><span>其他：</span><input type="button" id="empty" value="🤔清空"><input type="button" onclick="copy()" value="😂全选与复制" ></div>
+          
+          </div>
+          <div class="clear"> </div>	
+
+      </div>
+  </div>  
+ 
+ <script>
+ var selectionStart, selectionEnd;
+ let box=SE("#displayBox");
+ var textarea=SE("#content");
+ D.onkeyup = D.onmouseup = function() {
+     var userSelection = (W.getSelection) ? W.getSelection() : (D.selection) ? D.selection.createRange() : null;
+     if (userSelection) { selectionStart = textarea.selectionStart;  selectionEnd = textarea.selectionEnd; }
+ };
+     
+     function HtmlTag(a,b,c){ a.onclick=function(){
+        textarea.value = textarea.value.substring(0, selectionStart)
+            + b + textarea.value.substring(selectionStart, selectionEnd)
+            + c + textarea.value.substring(selectionEnd);
+        oE(box,textarea.value);
+    }}
+
+var dataList={
+    "Tag0":{ 
+         'Bold':'b>','Italic':'i>','Small':'small>','Underline':'u>', 'Strong':'strong>',
+         'Button':'button>','Mark':'mark>','P':'p>', 'Sub':'sub>', 'Sup':'sup>','Pre':'pre>',
+         'Del':'del>','Ins':'ins>','Q':'q>','Code':'code>'},
+    "Tag1":{
+        'Br':['','<br>'],'Hr':['','<hr>'],
+        'Ul':['<ul><li>慧思','天空</li></ul>'],'Ol':['<ol><li>慧思','天空</li></ol>'],
+        'List':['<li>','</li>\n'],
+        'Table':['','<table><thead><tr><th></th></tr></thead><tbody><tr><td></td></tr></tbody></table>'],
+        'Col':['<tr><td>',"</td></tr>\n"],'Row':['<td>',"</td>\n"]},
+     "Tag2":{
+'Div':'div>','Span':'span>','Header':'header>','Main':'main>','Footer':'footer>','Aside':'aside>', 'Nav':'nav>',
+'Section':'section>','Article':'article>','Address':'address>','Time':'time>'},
+"Tag3":{ 'Fisrtcapitalize':"","Capitalize":"","lowerCase":"","clearAlphabetStyle":""},
+"Form":["button","checkbox","color","date","datetime-local","email","file","hidden","image","month","number","password","radio","range","reset","search","submit","tel","text","time","url","week"],
+"totalList":{'TotalA':'总字符','TotalB':'中文字符','TotalC':'英文字符','TotalD':'英文单词','TotalE':'数字','TotalTime':'字符出现次数(区分中英)','TotalTimes':'字符出现次数(不区分)'},
+"replaceList":{'StringReplace':'字符替换','LengthCut':'长度截取','customCut':'自定义截取'}
+     }
+     
+var DT=dataList;
+!(function (a,b,c) {
+const numList=["style","widget","layout","alphabetStyle"];
+
+    for(let i=0;i<numList.length;i++){
+        const data = DT['Tag'+i];
+        for (const key in data) { SE("#"+numList[i]).innerHTML += a + key + b + key+c; }
+    }
+    for(var k=1;k<7;k++){SE('#heading').innerHTML+=a+'H'+k+ ' value=H'+k+c};
+   
+    for(var j=1;j<DT.Form.length;j++){SE('#inputType').innerHTML+='<option value="'+DT.Form[j]+'">'+DT.Form[j]+'</option>'}
+})('<input type="button" id=',' value=','>');
+
+
+for(key in DT.Tag0){ HtmlTag( QE.id(key),'<'+DT.Tag0[key],'</'+DT.Tag0[key]);} 
+for(key in DT.Tag1){ HtmlTag( QE.id(key),DT.Tag1[key][0],DT.Tag1[key][1]);} 
+for(key in DT.Tag2){ HtmlTag( QE.id(key),'<'+DT.Tag2[key],'</'+DT.Tag2[key]);} 
+for(var i=1;i<7;i++){ HtmlTag( SE('#H'+i),'<h'+i+'>','<\/h'+i+'>');}
+
+//2024-1-10 新增弹窗填写，有弹窗的额外处理
+
+	function handleClick(inputType, altText,text) {
+		    OE.alertBox(SE('#alertInputBox'), "输入需要插入的" + inputType , "输入" + altText + text,SE("#inputBox"));
+		
+		   SE("#ok1").onclick = function () {
+		        let prefix, postfix;
+		        let urlValue=SE("#urlInput").value;
+		        let textValue=SE('#textInput').value;
+		        if (inputType === '图片链接：') {
+		            prefix = `<img src="${urlValue}" alt="${textValue}"`;
+		            postfix = '>';
+		        } else if (inputType === '引用链接：') {
+		            prefix = `<iframe src="${urlValue}" width="98%" height="98%">`;
+		            postfix =  textValue +'</iframe>';
+		        } else if  (inputType === '锚链接：'){ 
+		            prefix = `<a href="${urlValue}">`;
+		            postfix =  textValue +'</a>';
+		        } else if  (inputType === '进度条默认数值'){
+		            prefix = `<progress value="${urlValue}" max="${textValue}">`;
+		            postfix =  Math.floor((urlValue/textValue)*100) +'%</progress>';
+		        } else {
+		            prefix = '<meter  value="${urlValue}" max="${textValue}">';
+		            postfix =  Math.floor((urlValue/textValue)*100) +'%</meter>';
+		        }
+		
+		        textarea.value = textarea.value.substring(0, selectionStart) +
+		            prefix + textarea.value.substring(selectionStart, selectionEnd) +
+		            postfix + textarea.value.substring(selectionEnd);
+		
+		       twoBoxVal(),hideE(SE('#alertInputBox')), oE(SE('#alertInputBox'),'');
+		    }
+		}
+		
+		const textSuffix=["，可不填",' (必填)，且要大于默认数值'];
+		A.onclick =  ()=> { handleClick('锚链接：', '锚文本名字',textSuffix[0]); }
+		Img.onclick = () => { handleClick('图片链接：', 'ALT属性值',textSuffix[0]);}
+		Iframe.onclick = ()=> { handleClick('引用链接：', '标记文字',textSuffix[0]);}
+		Progress.onclick = ()=> { handleClick('进度条默认数值', '最大数值',textSuffix[1]);}
+		Meter.onclick = ()=> { handleClick('默认数值', '最大数值',textSuffix[1]);}
+
+
+//选择相应的输入框类型输出到页面上
+
+    inputType.addEventListener("change", function() {
+	  CE("input",{attrs:{type:SE("#inputType").value}},Box)
+      textarea.value=Box.innerHTML;
+    });
+    
+ !(function () {
+        for (const key in DT.totalList) {
+            SE("#stringTotal").innerHTML += `<input type="button" id=${key} value=${DT.totalList[key]}>`;
+        }
+        for (const key in DT.replaceList) {
+            SE("#stringReplace").innerHTML += `<input type="button" id=${key} value=${DT.replaceList[key]}>`;
+        }
+})();   
+    
+
+function createClickHandler(type) {
+    return function() {
+        let regex;
+        switch (type) {
+            case '总字符':
+                regex = /[\s\S]/g; // 匹配任何字符
+                break;
+            case '中文字符':
+                regex = /[\u4E00-\u9FA5]/g; // 匹配中文字符
+                break;
+            case '英文字符':
+                regex = /[a-zA-Z]/g; // 匹配英文字符
+                break;
+            case '英文单词':
+                regex = /\b[A-Za-z]+\b/g; // 匹配英文单词
+                break;
+            case '数字':
+                regex = /[0-9]/g; // 匹配数字
+                break;
+            default:
+                return;
+        }
+
+        let count = (textarea.value.match(regex) || []).length;
+        boxValue('<b>' + type.charAt(0).toUpperCase() + type.slice(1) + '字符数量</b>（不含其他类型字符）：<mark>' + count + '</mark>');
+    };
+}
+
+let TotalId=[],TotalName=[];
+for (value in DT.totalList){ 
+    TotalId.push(value)
+    TotalName.push(DT.totalList[value])
+};
+
+for(var i=0;i<5;i++){ SE("#"+TotalId[i]).onclick=createClickHandler(TotalName[i])}
+
+
+TotalTime.onclick=()=>{ 
+    OE.confirm("输入需要匹配的字符：","",true,function (){
+    let count = 0;
+    let str=textarea.value.trim();
+    let subStr=SE("#alertBody").innerHTML.trim();
+    
+    if(str===''||subStr===''){ OE.alert('忘记填写内容啦ヽ(^。^)ノ',''); return; }
+    
+    const regex=/\s/g;
+        
+        if(regex.test(str)===true){  //判断传入的字符是单词，还是非单词，如果是单词则单独计算次数
+
+            let subStrs = str.split(' ');
+        for (let i = 0; i < subStrs.length; i++) {
+          if (subStrs[i] === subStr) {count++;}
+          }
+            
+        }
+        
+        else{
+            let index = str.indexOf(subStr);
+        while (index!== -1) {
+        count++;
+        index = str.indexOf(subStr, index + 1);
+    } 
+        }
+    
+    return boxValue(`<div style="overflow:scroll;height:450px;"><b>您输入的字符串为：</b>${str}</div><br><b>匹配的字符为：</b><mark>${subStr}</mark><br><b>字符出现次数：</b><mark>${count}</mark>`)
+    }
+)};
+
+
+TotalTimes.onclick=()=>{ 
+    OE.confirm("输入需要匹配的字符：","",true,function (){
+    let count = 0;
+    let str=textarea.value.trim();
+    let subStr=SE("#alertBody").innerHTML.trim();
+    
+    if(str===''||subStr===''){ OE.alert('忘记填写内容啦ヽ(^。^)ノ',''); return; }
+    
+    const regex=/\s/gi;
+        if(regex.test(str)===true){
+             let index = str.indexOf(subStr);
+        while (index!== -1) {
+        count++;
+        index = str.indexOf(subStr, index + 1);
+    } 
+        }
+    return boxValue(`<p><b>您输入的字符串为：</b>${subStr}</p><p><b>字符出现次数：</b><mark>${count}</mark></p>`)
+    }
+)};
+
+
+///-----
+
+
+/*字符操作*/
+function Replace(){
+	var stringReplace=new RegExp(SE("#urlInput").value,'ig'); //不建立正则的话，无法替换大小写和空格
+	  
+	  updateVal(textarea.value.replaceAll(stringReplace, SE('#textInput').value));
+	
+	   //与 replace() 不同，replaceAll将替换所有匹配的字符串，而不仅仅是第一个
+	OE.alert("共替换了:"+textarea.value.match(new RegExp(SE('#textInput').value, "g")).length+'个');
+}
+
+StringReplace.onclick=function(){
+    OE.alertBox(SE("#alertInputBox"),"查找您想替换的内容","输入您想替换的内容，如查找的111替换成222",Replace);
+}
+
+
+
+function sliceStringByLength(starLength, endLength) {
+  if (textarea.value.length <= endLength) {  return textarea.value; }
+  return textarea.value.slice(starLength, endLength);
+}
+
+
+LengthCut.onclick=function(){
+	OE.confirm('输入您想截取的长度，如8,20,3','2',true,dd);
+
+	function  dd(){
+	      let length=parseInt(SE("#alertBody").innerHTML);
+		  if (textarea.value.length<length){
+			  OE.alert('错误提示：字符串的长度为'+textarea.value.length+' ，截取的长度不能大于该长度','');
+	      }
+	      
+	      else{  boxValue(sliceStringByLength( 0,parseInt(length)));}
+	    }; 
+	
+		
+}
+
+function Custom(){
+	const num1=parseInt(SE("#urlInput").value);
+	    
+	if (textarea.value.length<num1) { OE.alert('字符串长度为'+textarea.value.length+',截取的位置需小于该长度','')}
+	
+	else{
+	     boxValue(textarea.value.substring(num1,parseInt(SE('#textInput').value)+num1));
+	}
+}
+
+
+customCut.onclick=()=>{OE.alertBox(SE("#alertInputBox"),"从哪里开始截取字符? 如0,3,5","截取后保留多少字符? 如3,5,8",Custom)}
+
+
+
+ !(function (){
+
+var EClick=[empty,Fisrtcapitalize,Capitalize,lowerCase,clearAlphabetStyle];
+var alphabetStyle=['text-transform:','capitalize','uppercase','lowercase',''];
+
+for(let i=1;i<4;i++){ 
+EClick[i].onclick=() =>{sE(textarea,alphabetStyle[0]+alphabetStyle[i]);sE(Box,alphabetStyle[0]+alphabetStyle[i])};
+ }  
+ 
+EClick[4].onclick=function(){  sE(textarea,'');sE(Box,'')} //清空样式
+
+   })();
+   
+   
+   
+
+SE('#content').onchange=function(){ oE(SE('#displayBox'),SE('#content').value)};
+</script>
+ 
+ <!--    分割线         -->
+</body>
+</html>
