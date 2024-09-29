@@ -1,0 +1,51 @@
+a{text-decoration:none;display: inline-block;color: #ff4b00;}
+center,.center{text-align: center;}
+input{display: inline-block;}
+input[disabled]{background-color: #ddd; cursor: not-allowed;color: #888;}
+.blue,.btn:hover{background-color: #2f7eed;color: #fff;}
+.orange,#empty,#ok,#ok1,#sure{background-color: #ff4b00;color: #fff;}
+h1{text-align: center;}
+
+/*弹窗-仅确认或取消，可传递值*/
+#confirmBox{display: none;background-color:#fff; background-color: rgba(255, 255, 255, 0.9); position: fixed; box-shadow: rgb(216, 216, 216) 1px 2px 5px; width: 300px; height: 190px; top: 20%; left: 38%; border-radius: 5px;}
+.alertTitle{background-color:#2f7eed;padding: 10px; font-size: 14px;font-weight: bold; color: #fff;overflow: hidden;white-space: nowrap;text-overflow: ellipsis;border-radius: 5px 5px 0 0; cursor: pointer;}
+.alertBody{padding:5px;text-align:center;height: 65px;font-size: 13px;overflow: hidden;margin-top: 10px;}
+.alertBody:focus{outline: 2px #006aff dashed;margin: 10px;}
+#sure,#cancel{position: absolute;bottom: 5px;}
+#sure{left:30px;padding: 10px 15px;}
+#cancel{left:200px;padding: 10px 15px;}
+
+/*两次弹窗信息填写*/
+#inputBox{position: relative;}
+#alertInputBox,#textInput,#ok1{display:none;}
+#ok,#ok1,#rewrite{position: absolute;z-index: 3;top: 135px;padding: 5px 15px;}
+#urlInput,#textInput{position: absolute;width: 280px; height: 40px;border-radius: 5px;border: 2px double rgba(0,0,0,0.7);top: 80px;left: 160px;background: rgba(255,255,255,0.9);overflow: hidden;}
+#urlInput{z-index: 3;}
+#textInput{z-index:10;}
+#ok{left: 215px;z-index: 3;}
+#ok1{left: 215px;z-index:10;}
+#rewrite{left: 300px;}
+
+.box{height:565px;padding:0 10px 10px 10px;line-height: 1.5em;margin:0 8px;box-shadow: 0 0 10px 0 #d6d6d6;overflow:scroll;}
+.box1{height:150px;}
+.btn{padding: 8px;border-radius: 5px;box-shadow: 2px 2px #d8d8d8;display: inline-block;cursor: pointer;border:0;margin:0 5px 7px 0;color: #666;background-color: transparent;}
+.bttomBox{padding: 10px; color: #696969;background-color: #fafafa;box-shadow: 2px 2px 5px 0 #cacaca;font-size: 13px;display:inline-block;}
+textarea{display: block;margin: 5px auto;padding: 10px;width:540px;height:300px;border-radius: 8px;border: 1px solid #eee;font-family: cursive,Arial,ans-serif;font-size: 15px;}
+.updateInfo {height: 100px;overflow-y: scroll;color: #888;background-color: #eee;padding: 10px;border-radius: 10px;}
+
+.updateInfo ul li{ font-size: 12px;}
+.updateInfo h2{ font-size: 14px;line-height: 1em;}
+
+.container{width: 1200px;margin:auto;padding-top:5px;}
+.L1,.L2{float:left; margin: 5px; width: 580px;}
+.L2 p{height: 45px;}
+.clear{clear: both;width:100%;}
+
+
+/*适应手机*/
+@media screen and (max-width:1200px){
+  .container,textarea,.L1,.L2{width: 100%;}
+  .box{height: auto;}
+  textarea{padding: 0;}
+ #confirmBox{left:10%;}
+}
